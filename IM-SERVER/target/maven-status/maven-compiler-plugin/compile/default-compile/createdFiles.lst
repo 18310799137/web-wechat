@@ -1,0 +1,11 @@
+com\yucheng\im\service\util\Constants.class
+com\yucheng\im\service\manager\dao\IQueryUserInfoDao.class
+com\yucheng\im\service\manager\service\IQueryUserInfoService.class
+com\yucheng\im\service\util\ConnRemoteServer.class
+com\yucheng\im\service\manager\BaseDao.class
+com\yucheng\im\service\manager\service\QueryUserInfoServiceImpl.class
+com\yucheng\im\service\util\EncryptString.class
+com\yucheng\im\service\manager\dao\QueryUserInfoDaoImpl.class
+com\yucheng\im\service\manager\BaseService.class
+com\yucheng\im\service\entity\UserInfoBean.class
+com\yucheng\im\service\manager\dao\IUserFriendDao.class

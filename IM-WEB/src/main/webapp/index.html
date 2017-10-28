@@ -1,0 +1,34 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>JSP Page</title>
+<script src="/IM-WEB/dwr/engine.js"></script>
+<script src="/IM-WEB/dwr/interface/DSjavascript.js"></script>
+<script src="/IM-WEB/resource/js/jquery-1.8.0.min.js"></script>
+</head>
+<body>
+
+<h1>Hello World!</h1>
+<table id="onlineUser">table message</table>
+	<h2>Hello World!</h2>
+	<br/>
+</body>
+</html>
+<script>
+window.onload=function(){
+	DSjavascript.testDwrMethod("张三",function(data){console.info("result:"+data);});
+};
+
+/** 
+更新在线用户列表 
+*/  
+function onlineUser(onlineUsers){
+	console.info(onlineUsers);
+if(onlineUsers){
+  $("#onlineUser").empty();  
+    $(onlineUsers).each(function(i, user){
+        $("#onlineUser").append("<tr><td>"+ user.userName +"</td></tr>");  
+    });
+}  
+}
+</script>

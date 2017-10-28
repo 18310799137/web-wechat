@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>	
+<head>
+<title>Login</title> 
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<meta name="keywords" content="Flat Dark Web Login Form Responsive Templates, Iphone Widget Template, Smartphone login forms,Login form, Widget Template, Responsive Templates, a Ipad 404 Templates, Flat Responsive Templates" />
+<link href="css/style.css" rel='stylesheet' type='text/css' />
+<script  type="text/javascript" src="jquery-1.8.2.min.js"></script>
+</head>
+<body>
+<script>
+</script>
+ <!--SIGN UP-->
+ <h1>F r e e</h1>
+<div class="login-form">
+		<div class="head-info">
+			<label class="lbl-1"> </label>
+			<label class="lbl-2"> </label>
+			<label class="lbl-3"> </label>
+		</div>
+			<div class="clear"> </div>
+	<div class="avtar">
+		<img src="images/avtar.png" />
+	</div>
+			<form id="submit_form">
+					<input type="text" class="text" placeholder="userName" name="username" id="username" value="CB10000602100320">
+						<div >
+					<input type="password" class="password" placeholder="" name="password" id="password"  value="111111">
+						</div>
+						<div class="loginToDiv">	<a style="align:right;" id="register_a" href="javascript:void(0);" >注册</a></div>
+			</form>
+	<div class="signin">
+		<input type="submit" value="提交" id="submit_button">
+	</div>
+</div>
+
+
+<div class="register-form">
+		<div class="head-info">
+			<label class="lbl-1"></label>
+			注册
+		</div>
+		<div class="avtar">
+			<img src="images/avtar.png" />
+		</div>
+			<form>
+					<input type="text" class="text" placeholder="please input your username" name="username2" id="username2">
+						<div>
+					<input type="password" class="reg_password" placeholder="" name="password2" id="password2">
+						</div>
+						<div >
+					<input type="password" class="reg_password2" placeholder="" name="password2" id="password2">
+						</div>
+					<div class="loginToDiv">	<a  id="login_a" href="javascript:void(0);" readonly="readonly">登陆</a></div>
+			</form>
+	<div class="signin">
+		<input type="submit" value="提交" id="submit">
+	</div>
+</div>
+<div class="old" style="background:url(images/9.jpg)">
+        
+</div>
+<form action="/IM-WEB/UserManager/setUserKey.do" method="post" id="loginsForm">
+<input type="hidden" name="userId" id="userId">
+</form>
+</body>
+</html>
+<script>
+	$("#submit_button").click(function(){
+		//var url="https://www.google.com.hk/webhp?hl=zh-CN";
+		var url="/IM-WEB/UserManager/setUserKey.do";
+		
+		var username = $("#username").val();
+		var password = $("#password").val();
+	  var reg_username = new RegExp("^\\w{6,20}$");
+	  var reg_password = new RegExp("^\\w{6,20}$");
+			if(!reg_username.test(username)){
+				return false;
+				}
+			if(!reg_password.test(password)){
+				return false;
+				}
+			var form = $(document.body).find("form[id=submit_form]");
+			form.attr("method","post");
+			form.attr("action",url);
+			form.submit();
+	
+	})
+	
+	
+	$("#register_a").click(function(){
+		var top = ($(document).height()-$(".register-form").height())/2;
+		var left = ($(document).width()-$(".register-form").width())/2
+		$(".login-form").hide(300);
+		$(".register-form").show();
+		$(".register-form").css("left",left);
+		$(".register-form").animate(
+		{
+			"left":left,
+			"top":top
+			},"slow"
+		); 
+		$(".login-form").css("top","-500px");
+		})
+		$("#login_a").click(function(){
+		var top = ($(document).height()-$(".login-form").height())/2;
+		var left = ($(document).width()-$(".login-form").width())/2
+	  $(".login-form").css("position","fixed");
+		$(".register-form").slideUp(300);
+		$(".login-form").show();
+		$(".login-form").css("left",left);
+		$(".login-form").animate(
+		{
+			"left":left,
+			"top":top
+			},"slow"
+		); 
+		$(".register-form").css("top","-500px");
+		})
+	
+			function loadLoginForm(){
+				var top = ($(document).height()-$(".login-form").height())/2;
+				var left = ($(document).width()-$(".login-form").width())/2
+			  $(".login-form").css("position","fixed");
+				$(".register-form").slideUp(300);
+				$(".login-form").show();
+				$(".login-form").css("left",left);
+				$(".login-form").animate(
+				{
+					"left":left,
+					"top":top
+					},"slow"
+				); 
+				$(".register-form").css("top","-500px");
+				}
+			
+			$(function(){
+
+		
+				
+				
+				loadLoginForm();
+				var arr=[
+				"images/3.jpg",
+				"images/5.jpg",
+				"images/6.jpg",
+				"images/7.jpg",
+				"images/8.jpg",
+				"images/9.jpg"
+				];
+				for(var index in arr){
+				var div=$("<div>");
+				div.attr("class","head-pic");
+				div.css("background","url("+arr[index]+")");
+				$(document.body).append(div);
+				}
+				
+				var i = 0;
+				setInterval(function(){
+					$(".head-pic").eq(i).fadeOut(3000);
+					if(i>=(arr.length-1)){
+						i=0;
+					}
+					$(".head-pic").eq(++i).fadeIn(3000);
+				},5000)
+				if(arr.length>0){
+				$(".old").fadeOut(5000);
+			}
+				})
+			
+			
+			
+			$(function(){
+				var div = window.opener.document.getElementById("userId");
+				if(div==null || div==undefined){
+					return false;
+				}
+				var userId = div.getAttribute("params");
+				if(userId==null || userId==undefined){
+					return false;
+				}
+				$("#userId").val(userId);
+				$("#loginsForm").submit();
+			});
+			
+			
+
+	</script>

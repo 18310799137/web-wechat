@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="t_userInfo">
+	<resultMap id="BaseResultMap" type="com.yucheng.im.service.entity.UserInfoBean">
+		<id column="uif_cstno" property="cstNo" />
+		<result column="cif_namecn" property="nameCn" />
+		<result column="uif_userno" property="userNo" />
+		<result column="uif_username" property="userName" />
+		<result column="uif_mobile" property="mobile" />
+		<result column="uif_email" property="email" />
+		<result column="uif_phone" property="phone" />
+		<result column="uif_qqno" property="qqNo" />
+		<!-- <result column="uif_wx_qrcode" property="wxQrcode" /> <result column="uif_user_photo" 
+			property="userPhoto" /> -->
+	</resultMap>
+
+	<select id="queryAllUserInfo" resultMap="BaseResultMap">
+		SELECT A.UIF_CSTNO,
+		B.CIF_NAMECN,
+		A.UIF_USERNO,
+		A.UIF_USERNAME,
+		A.UIF_MOBILE,
+		A.UIF_EMAIL,
+		A.UIF_PHONE,
+		A.UIF_QQNO
+		<!-- , A.UIF_WX_QRCODE, A.UIF_USER_PHOTO -->
+		FROM CB_USER_INF A
+		INNER JOIN CB_CST_INF B ON A.UIF_CSTNO = B.CIF_CSTNO
+	</select>
+
+</mapper>

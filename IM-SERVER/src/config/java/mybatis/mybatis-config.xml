@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<mappers>
+		<mapper resource="mybatis/PageHelpMapper.xml" />
+		<mapper resource="mybatis/sqlmap/UserInfoBeanSqlMap.xml" />
+		<mapper resource="mybatis/sqlmap/InitTable.xml" />
+		<mapper resource="mybatis/sqlmap/UserMsgInfoSqlMap.xml" />
+		<mapper resource="mybatis/sqlmap/GroupMemMsgSqlMap.xml" />
+		<mapper resource="mybatis/sqlmap/UserGroupMsgInfoSqlMap.xml" />
+	</mappers>
+</configuration>

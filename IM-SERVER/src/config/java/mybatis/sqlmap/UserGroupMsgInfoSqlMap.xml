@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="t_userGroupMsg">
+	<resultMap id="BaseResultMap"  type="com.yucheng.im.service.entity.msg.GroupMessage">
+		<id column="uuid" property="uuid" />
+		<result column="from_user_id" property="fromUserId" />
+		<result column="to_group_id" property="toGroupId" />
+		<result column="is_notice" property="isNotice" />
+		<result column="opr_type" property="oprType" />
+		<result column="content" property="content" />
+		<result column="send_time" property="sendTime" />
+	</resultMap>
+	<insert id="addUserGroupMsg" parameterType="com.yucheng.im.service.entity.msg.GroupMessage">
+		insert into t_user_group_msg
+		(uuid,from_user_id,to_group_id,is_notice,opr_type,content,send_time)values(
+		#{uuid},#{fromUserId},#{toGroupId},#{isNotice},#{oprType},#{content},#{sendTime}
+		)
+	</insert>
+	<select id="queryGroupMsgByPage" resultMap="BaseResultMap" parameterType="Map">
+		select * from 
+			(select t1.* , ROWNUM nu from 
+			(select t.* from t_user_group_msg t 
+			where 1=1
+			<if test="toGroupId!=null and toGroupId!=''">
+			and to_group_id=#{toGroupId}
+			</if>
+			<if test="uuid!=null and uuid!=''">
+			and uuid=#{uuid}
+			</if>
+			<if test="fromUserId!=null and fromUserId!=''">
+			and from_user_id=#{fromUserId}
+			</if>
+			<if test="isNotice!=null and isNotice!=''">
+			and is_notice=#{isNotice}
+			</if>
+			<if test="oprType!=null and oprType!=''">
+			and opr_type=#{oprType}
+			</if>
+			<if test="orderCondition!=null and orderCondition!=''">
+			 ${orderCondition}
+			</if>
+			) t1) t2
+		<![CDATA[
+		where t2.nu >(${pageSize}*(${nowPage}-1)) and t2.nu <=(${pageSize}*${nowPage})
+		]]>
+			
+	</select>
+</mapper>

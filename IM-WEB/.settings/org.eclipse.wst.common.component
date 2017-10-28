@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="IM-WEB">
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/" source-path="/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/lib" source-path="/redis-lib"/>
+        <dependent-module archiveName="IM-SERVER-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/IM-SERVER/IM-SERVER">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="IM-WEB"/>
+        <property name="java-output-path" value="/IM-WEB/target/classes"/>
+    </wb-module>
+</project-modules>

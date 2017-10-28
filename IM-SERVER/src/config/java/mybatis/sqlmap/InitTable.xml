@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="t_initTable">
+	<select id="queryUserFriendTableIsExist" resultType="int">
+	  SELECT COUNT(*) FROM User_Tables WHERE table_name = UPPER('t_user_friend_msg')
+	</select>
+	<update id="createUserFriendMsgTable">
+	create table t_user_friend_msg(
+	uuid varchar2(100) primary key,
+	from_user_id varchar2(100),
+	to_user_id varchar2(100),
+	is_notice varchar2(1),
+	content varchar2(1000),
+	msg_type varchar2(1),
+	dispose_status varchar2(1),
+	is_unread varchar2(1),
+	send_time varchar2(30)
+	)
+	</update>
+	<select id="queryGroupMemMsgTable" resultType="int">
+		select count(*) from User_Tables where table_name = UPPER('t_group_mem_msg')
+	</select>
+	<update id="dropUserMsgTables">
+		drop table t_user_friend_msg
+	</update>
+	<update id="createGroupMemMsgTable">
+	create table t_group_mem_msg(
+	uuid varchar2(100) primary key,
+	group_id varchar2(100),
+	member_id varchar2(100),
+	unread_num int
+	)
+	</update>
+	<update id="dropGroupMemMsgTables">
+	drop table t_group_mem_msg
+	</update>
+	<select id="queryUserGroupMsgTableIsExist" resultType="int">
+	  SELECT COUNT(*) FROM User_Tables WHERE table_name = UPPER('t_user_group_msg')
+	</select>
+	<update id="createUserGroupMsgTable">
+	create table t_user_group_msg(
+	uuid varchar2(100) primary key,
+	from_user_id varchar2(100),
+	to_group_id varchar2(100),
+	opr_type varchar2(1),
+	is_notice varchar2(1),
+	content varchar2(1000),
+	send_time varchar2(30)
+	)
+	</update>
+<update id="dropUserGroupMsgTables">
+drop table t_user_group_msg
+</update>
+
+</mapper>
