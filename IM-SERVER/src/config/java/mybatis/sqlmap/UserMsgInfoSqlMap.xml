@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="t_userMsg">
+	<resultMap id="BaseResultMap" type="com.yucheng.im.service.entity.msg.UserMessage">
+		<id column="uuid" property="uuid" />
+		<result column="from_user_id" property="fromUserId" />
+		<result column="to_user_id" property="toUserId" />
+		<result column="is_notice" property="isNotice" />
+		<result column="content" property="content" />
+		<result column="msg_type" property="mType" />
+		<result column="dispose_status" property="disposeStatus" />
+		<result column="is_unread" property="isUnread" />
+		<result column="send_time" property="sendTime" />
+	</resultMap>
+	<insert id="addUserMsg" parameterType="com.yucheng.im.service.entity.msg.UserMessage">
+		insert into
+		t_user_friend_msg
+		(uuid,from_user_id,to_user_id,is_notice,content,msg_type,dispose_status,send_time,is_unread)values(
+		#{uuid},#{fromUserId},#{toUserId},#{isNotice},#{content},#{mType},#{disposeStatus},#{sendTime},#{isUnread}
+		)
+	</insert>
+	<select id="queryUnreadUserMsgCount" resultType="int"
+		parameterType="Map">
+		select count(*) from t_user_friend_msg where
+		1=1
+		<if test="toUserId!=null and toUserId!=''">
+			and to_user_id =#{toUserId}
+		</if>
+		<if test="fromUserId!=null and fromUserId!=''">
+			and from_user_id =#{fromUserId}
+		</if>
+		<if test="isUnread!=null and isUnread!=''">
+			and is_unread =#{isUnread}
+		</if>
+		<if test="isNotice!=null and isNotice!=''">
+			and is_notice=#{isNotice}
+		</if>
+		<if test="mType!=null and mType!=''">
+			and msg_type=#{mType}
+		</if>
+		<if test="disposeStatus!=null and disposeStatus!=''">
+			and dispose_status=#{disposeStatus}
+		</if>
+
+	</select>
+	<select id="queryUserMsgByPage" resultMap="BaseResultMap"
+		parameterType="Map">
+		
+			select * from (
+				select t1.*, ROWNUM nu  from (
+					select t.*
+					from t_user_friend_msg t 
+					where 1=1 
+					and (( from_user_id=#{fromUserId}  　and to_user_id=#{toUserId}) or ( from_user_id=#{toUserId} 　and to_user_id=#{fromUserId}))
+					
+					and msg_type!='R' 
+					<if test="isNotice!=null and isNotice!=''">
+					and is_notice=#{isNotice}
+					</if>
+					<if test="mType!=null and mType!=''">
+						and msg_type=#{mType}
+					</if>
+					<if test="isUnread!=null and isUnread!=''">
+					and is_unread=#{isUnread}
+					</if>
+					<if test="disposeStatus!='' and disposeStatus!=null">
+					and dispose_status=#{disposeStatus}
+					</if>
+					<if test="orderCondition!=null and orderCondition!=''">
+					 ${orderCondition}
+					</if>
+				)t1 
+				 )t2
+			<![CDATA[
+			where
+			t2.nu >(${pageSize}*(${nowPage}-1))
+			 and 
+			 t2.nu <=(${pageSize}*${nowPage})
+		]]>
+	</select>
+	<select id="queryUserReqMsgList" resultMap="BaseResultMap"
+		parameterType="Map">
+			select * from (
+			select t.*, ROWNUM nu 
+			from t_user_friend_msg t 
+			where 1=1 
+			<if test="fromUserId!=null and fromUserId!=''">
+				and from_user_id=#{fromUserId}  
+			</if>
+			<if test="toUserId!=null and toUserId!=''">
+				and to_user_id=#{toUserId}  
+			</if>
+			<if test="isNotice!=null and isNotice!=''">
+			and is_notice=#{isNotice}
+			</if>
+			<if test="mType!=null and mType!=''">
+				and msg_type=#{mType}
+			</if>
+			<if test="isUnread!=null and isUnread!=''">
+			and is_unread=#{isUnread}
+			</if>
+			<if test="disposeStatus!='' and disposeStatus!=null">
+			and dispose_status=#{disposeStatus}
+			</if>
+			<if test="orderCondition!=null and orderCondition!=''">
+			 ${orderCondition}
+			</if>
+			)t1 
+			<![CDATA[
+			where
+			t1.nu >(${pageSize}*(${nowPage}-1))
+			 and 
+			 t1.nu <=(${pageSize}*${nowPage})
+		]]>
+	</select>
+	<update id="modifyUserMsgStatus" parameterType="Map">
+		update t_user_friend_msg set
+		is_unread=#{isUnread}
+		<if test="disposeStatus!=null and disposeStatus!=''">
+			,dispose_status=#{disposeStatus}
+		</if>
+		where
+		1=1
+		<if test="fromUserId!=null and fromUserId!=''">
+			and from_user_id=#{fromUserId}
+		</if>
+		<if test="toUserId!=null and toUserId!=''">
+			and to_user_id=#{toUserId}
+		</if>
+		<if test="isNotice!=null and isNotice!=''">
+			and is_notice=#{isNotice}
+		</if>
+		<if test="mType!=null and mType!=''">
+			and msg_type=#{mType}
+		</if>
+	</update>
+</mapper>

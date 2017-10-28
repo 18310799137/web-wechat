@@ -1,0 +1,1512 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+<meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<title>中原银行金融同业平台-聊天窗口</title>
+<link href="/IM-WEB/qqFace/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+<link href="/IM-WEB/qqFace/css/reset.css" rel="stylesheet" />
+<link href="/IM-WEB/resource/css/common.css" rel="stylesheet" />
+<link href="/IM-WEB/resource/css/frame.css" rel="stylesheet" />
+<script type="text/javascript"
+	src="/IM-WEB/resource/js/jquery-1.8.0.min.js"></script>
+<script src="/IM-WEB/resource/js/laydate/laydate.js"></script>
+<script src="/IM-WEB/dwr/engine.js"></script>
+<script src="/IM-WEB/dwr/util.js"></script>
+<script src="/IM-WEB/dwr/interface/DwrUserGroupServiceImpl.js"></script>
+<script src="/IM-WEB/dwr/interface/DwrUserFriendServiceImpl.js"></script>
+<script src="/IM-WEB/dwr/interface/DwrUserQueryServiceImpl.js"></script>
+<script src="/IM-WEB/resource/servPushToClient.js"></script>
+<script src="/IM-WEB/resource/js/UserFridendListQuery.js"></script>
+<script src="/IM-WEB/resource/js/py.js"></script>
+<script src="/IM-WEB/resource/js/friendInfoQuery.js"></script>
+<script src="/IM-WEB/resource/js/newFriendsQuery.js"></script>
+<script src="/IM-WEB/resource/queryGroupOrFriendMemList.js"></script>
+<script src="/IM-WEB/qqFace/js/jquery.qqFace.js"></script>
+
+
+</head>
+<body style="position: relative;"
+	onload="dwr.engine.setActiveReverseAjax(true);dwr.engine.setNotifyServerOnPageUnload(true)">
+	<!-- 点击头像出来的详情弹窗 -->
+	 
+	<div style="z-index:10; position:absolute;width:100%;height:100%;opacity: 0.5;background:#ccc;display: none;" id="backGroundDIV" ></div>
+	
+	<div class="self_img_info_box" style="display: none;" name="member_details">
+		<div class="self_img_info_padding">
+			<div class="self_img_info_cen_top clearfix">
+				<div class="self_img_info_top_box fl">
+					<div class="self_img_info_top clearfix">
+						<h3 class="user_nickname fl" id="cardName"></h3>
+						<i class="icon_sex_boy fl"></i>
+					</div>
+					<p class="self_img_info_btm clearfix">
+						<label class="fl">企业用户号：</label>
+					
+						<span class="self_img_info_btm_wxh fl" style="font-size:5px;font-style: normal;" id="cardNumber"></span>
+					</p>
+				</div>
+				<img  id="cardPhoto" src=""
+					class="self_img_info_img fr" />
+			</div>
+			<ul class="self_img_info_cen_btm">
+				<li class="clearfix"  id="cardRemarksOuter"><label class="fl" >备&nbsp;&nbsp;&nbsp;注</label>
+					<div class="ipt_wrapper">
+						<input type="text" id="cardRemarks" value="备注名" placeholder="点击添加备注" onfocus="showBtmLine(this);"
+							onblur="hideBtmLine(this);" />
+					</div></li>
+				<li class="clearfix"   id="cardNickNameOuter"><label class="fl">群昵称</label>
+					<div class="ipt_wrapper" >
+						<input type="text" value="群昵称" readonly id="cardNickName"/>
+					</div></li>
+				<li class="clearfix"><label class="fl" >单&nbsp;&nbsp;&nbsp;位</label>
+					<div class="ipt_wrapper">
+						<input type="text" value="北京 朝阳" readonly id="cardRegion"/>
+					</div></li>
+				<li class="clearfix"   id="cardSourceOuter"><label class="fl">来&nbsp;&nbsp;&nbsp;源</label>
+					<div class="ipt_wrapper">
+						<input type="text" value="通过群聊添加" readonly id="cardSource"/>
+					</div></li>
+			</ul>
+			<div class="self_img_info_icon txt_rgh">
+				<div class="has_friends">
+					<!-- 已经是好友的显示此图标 -->
+					<i class="icon_share"></i> <i class="icon_sendMes"></i>
+				</div>
+				<div class="not_friends" style="display: none;">
+					<!-- 非好友的出现此图标 -->
+					<i class="icon_addFriends"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="chat_layer_mask" style="display: none;"></div>
+	<!-- 几乎透明遮罩 -->
+
+	<!-- 加好友的弹窗开始 -->
+	<div class="add_friends_box" style="display: none;">
+		<i class="close_btn"></i>
+		<!-- 关闭按钮 -->
+		<div class="chat_search_box chat_search_box1" id="addFriendsSearch">
+			<input type="text" id="friendQueryByAllInput" placeholder="输入要搜索的客户或者用户名称" />
+			<button class="tab_sure_btn sma_tab_sure_btn fr"
+				id="friendQueryByAllButton">搜索</button>
+			<i class="icons_search"></i> <i class="icons_cancel"
+				style="display: none;"></i>
+		</div>
+		<!-- 平台用户列表 -->
+		<div class="add_friends_list_box" onmouseover="scrollEnter(this);"
+			onmouseout="scrollOut(this);">
+			<ul class="left_users_list" id="queryAllUserPanel">
+
+				<li class="userLi clearfix"><img
+					src="/IM-WEB/resource/img/tx/tx1.jpg" />
+					<button class="added_btn" disabled>已添加</button>
+					<p class="userNickName"></p></li>
+
+			</ul>
+		</div>
+	</div>
+	<!-- 加好友的弹窗结束 -->
+
+	<!-- 加好友发送添加请求的弹窗开始 -->
+	<div class="add_friends_request_box" style="display: none; z-index: 11">
+		<i class="close_btn"></i>
+		<!-- 关闭按钮 -->
+		<textarea class="request_info" id="addFriendInputMsg"></textarea>
+		<div class="add_friends_request_btn">
+			<button class="tab_sure_btn sure_btn" id="addFriendButtonReq">确定</button>
+			<button class="tab_sure_btn cancel_btn">取消</button>
+		</div>
+	</div>
+	<!-- 加好友发送添加请求的弹窗结束 -->
+
+	<!-- 创建群的弹窗开始 -->
+	<div class="create_group_box clearfix" style="display: none;">
+		<i class="close_btn"></i>
+		<!-- 关闭按钮 -->
+		<div class="create_group_left_list">
+			<div class="chat_search_box chat_search_box1" id="createGroupSearch">
+				<input type="text" />
+				<button class="tab_sure_btn sma_tab_sure_btn fr">搜索</button>
+				<i class="icons_search"></i> <i class="icons_cancel"
+					style="display: none;"></i>
+			</div>
+			<!-- 好友列表 -->
+			<div class="create_group_left_list_box"
+				onmouseover="scrollEnter(this);" onmouseout="scrollOut(this);">
+				<ul class="left_users_list">
+					<li class="list_headlines">A</li>
+					<!-- <li class="userLi clearfix">
+						<img src="/IM-WEB/resource/img/tx/tx1.jpg"/>
+						<label class="checkbox checked" data-value="checked"></label>
+						注：选中状态的时候需要有类名checked,data-value="checked"
+						<p class="userNickName">A星A星A星A星A星A星A星A星A星A星</p>
+					</li> -->
+					
+					<li class="list_headlines">C</li>
+					<li class="userLi clearfix"><img
+						src="/IM-WEB/resource/img/tx/tx2.jpg" /> <label class="checkbox"
+						data-value=""></label>
+						<p class="userNickName">C星</p></li>
+					<li class="userLi clearfix"><img
+						src="/IM-WEB/resource/img/tx/tx3.jpg" /> <label class="checkbox"
+						data-value=""></label>
+						<p class="userNickName">C星1</p></li>
+					<li class="userLi clearfix"><img
+						src="/IM-WEB/resource/img/tx/tx4.jpg" /> <label class="checkbox"
+						data-value=""></label>
+						<p class="userNickName">C星2</p></li>
+				</ul>
+			</div>
+		</div>
+		<div class="create_group_right_select_list">
+			<p class="create_group_tip" id="createGroupTip">请勾选需要添加的联系人</p>
+			<!-- 选中的好友 -->
+			<div class="create_group_selected_friends"
+				onmouseover="scrollEnter(this);" onmouseout="scrollOut(this);">
+				<ul class="left_users_list" id="createGroupSelectedList">
+					<!-- <li class="userLi clearfix">
+              			<img src="/IM-WEB/resource/img/tx/tx1.jpg"/>
+              			<i class="create_group_selected_cancel"></i>
+              			<p class="userNickName">C星1C星1C星1C星1C星1C星1C星1C星1</p>
+              		</li> -->
+				</ul>
+			</div>
+			<!-- 确定/取消按钮 -->
+			<div class="create_group_right_bottom_btn">
+				<button class="create_group_sure_btn disabled" disabled>确定</button>
+				<button class="create_group_cancel_btn">取消</button>
+			</div>
+		</div>
+	</div>
+	<!-- 创建群的弹窗结束 -->
+
+	<!-- 快速报价点击出来的弹窗开始 -->
+	<div class="rapid_quotation_box" style="display: none;">
+		<i class="close_btn"></i>
+		<div class="rapid_quotation_con_box">
+			<div class="search_rows clearfix">
+				<label>产品类型：</label>
+				<div class="search_doubleipt">
+					<a class="active" id="tongcun" data-value="0">同存</a> <a data-value="1" id="licai">理财</a>
+				</div>
+			</div>
+			<div class="search_rows clearfix">
+				<label>利&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;率：</label>
+				<div class="search_doubleipt">
+					<input type="text" id="rateInput"/>%
+				</div>
+			</div>
+			<div class="search_rows clearfix">
+				<label>金&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;额：</label>
+				<div class="search_doubleipt">
+					<input type="text" id="moneyInput"/>万
+				</div>
+			</div>
+			<div class="search_rows clearfix">
+				<label>期&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;限：</label>
+				<div class="search_doubleipt">
+					<input type="text" id="deadlineInput"/>天
+				</div>
+			</div>
+			<div class="search_rows clearfix">
+				<label>起&nbsp;&nbsp;息&nbsp;&nbsp;日：</label>
+				<div class="search_doubleipt">
+					<input type="text" readonly unselectable='on'
+						class="rapid_quotation_dataIpt" onclick="laydate()" id="StartInterestDate"/>
+				</div>
+			</div>
+		</div>
+		<!-- 确定/取消按钮 -->
+		<div class="rapid_quotation_btn_box">
+			<button class="tab_sure_btn sure_btn" >确定</button>
+			<button class="tab_sure_btn cancel_btn">取消</button>
+		</div>
+	</div>
+	<!-- 快速报价点击出来的弹窗结束 -->
+
+
+	<div class="con_wrapper">
+		<!-- 左侧列表开始 -->
+		<div class="left_client_list left_client_list1">
+			<div class="left_list_box clearfix">
+				<div class="left_list_btn">
+					<label class="icons_currentUser" id="aa1"> <img
+						src="/IM-WEB/resource/img/tx/tx.jpg" width="100%" class="user_tx" isUserImg="true"/>
+					</label> <span class="icons_chatPic active" title="聊天"> <i
+					id="unReadSessionCount"></i>
+					</span> <span class="icons_userPhoto" title="通讯录"> <i id="unReadReqCount"></i>
+					</span> <span class="icons_addPic">
+						<div class="add_clients_box">
+							<i class="icons_left_ksj"></i>
+							<p>加好友</p>
+							<p>创建群</p>
+						</div>
+					</span>
+				</div>
+				<div class="left_right_list">
+					<div class="chat_search_box chat_search_box1" id="leftListSearch">
+						<input type="text" />
+						<button class="tab_sure_btn sma_tab_sure_btn fr" id="sessionListVagueQueryButton">搜索</button>
+						<i class="icons_search"></i> <i class="icons_cancel"
+							style="display: none"></i>
+					</div>
+					<div class="chatLeftListBox">
+						<!-- 会话列表左侧开始 -->
+						<div id="chatLeftDiv" class="chatLeftDiv"
+							onmouseover="scrollEnter(this);" onmouseout="scrollOut(this);">
+							<ul   class="left_users_list" id="sessionListUl">
+							</ul>
+						</div>
+						<!-- 好友列表左侧结束 -->
+
+
+						<!-- 通讯录列表左侧开始 -->
+						<div id="addressBook" class="address_book_list_box"
+							style="display: none;" onmouseover="scrollEnter(this);"
+							onmouseout="scrollOut(this);">
+							<!-- 新的朋友 -->
+							<ul class="left_users_list btm_line" id="txlNewFriendsBox">
+								<li class="list_headlines">新的朋友</li>
+								<li class="userLi clearfix active"><i 
+									id="newUserReqMsgNumber"></i> <img
+									src="/IM-WEB/resource/img/tx/tx_new_friend.jpg" />
+									<p class="userNickName">新的朋友</p></li>
+							</ul>
+							<!-- 平台 -->
+							<ul class="left_users_list btm_line" id="txlPlatformBox">
+								<li class="list_headlines">平台</li>
+
+							</ul>
+							<!-- 群聊 -->
+							<ul class="left_users_list btm_line" id="txlGroupChatBox">
+								<li class="list_headlines">群聊</li>
+								 
+							</ul>
+							<!-- 好友 -->
+							<ul class="left_users_list btm_line" id="txlCirclesBox">
+								<li class="list_headlines" id="userFriendListTagA">
+		    						A
+		                		</li>
+		                	<!-- 	<li class="userLi clearfix">
+		                			<img src="/IM-WEB/resource/img/tx/tx3.jpg"/>
+		                			<p class="userNickName">A廊坊银行</p>
+		                		</li> -->
+							</ul>
+						</div>
+						<!-- 通讯录列表左侧结束 -->
+
+
+						<!-- 搜索栏弹出层开始 -->
+						<div class="chat_left_layer_mask" style="display: none"></div>
+						<!-- 遮罩 -->
+						<div class="chat_search_alert_box" style="display: none"
+							onmouseover="scrollEnter(this);" onmouseout="scrollOut(this);">
+							<!-- 联系人 -->
+							<div class="chat_search_window chat_contact_search_box">
+								<div class="search_top_tip">
+									<span class="title">联系人</span> <a class="showAll">收起</a>
+								</div>
+								<ul id="contact" class="left_users_list">
+									<!-- 
+									<li><img src="/IM-WEB/resource/img/tx/tx2.jpg" />
+										<p class="userNickName">中信银行</p></li> -->
+									
+								</ul>
+							</div>
+							<!-- 群聊 -->
+							<!-- <div class="chat_search_window chat_groupChat_search_box">
+								<div class="search_top_tip">
+									<span class="title">群聊</span>
+									<a class="showAll">显示全部</a>
+									注：如果不超过五条的话，就不用出现"显示全部"字样
+								</div>
+								<ul id="groupChatBox" class="left_users_list">
+									<li>
+										群聊为三个人的时候
+										<ol class="group_img_box">
+											<li style="width: 50%; height: 50%; margin: 0 auto;"><img
+												src="/IM-WEB/resource/img/tx/tx1.jpg" /></li>
+											<li style="float: left; width: 50%; height: 50%;"><img
+												src="/IM-WEB/resource/img/tx/tx2.jpg" /></li>
+											<li style="float: left; width: 50%; height: 50%;"><img
+												src="/IM-WEB/resource/img/tx/tx3.jpg" /></li>
+										</ol>
+										<p class="userNickName">中原银行</p>
+									</li>
+									<li>
+										群聊为四个人的时候
+										<ol class="group_img_box">
+											<li style="float: left; width: 50%; height: 50%;"><img
+												src="/IM-WEB/resource/img/tx/tx1.jpg" /></li>
+											<li style="float: left; width: 50%; height: 50%;"><img
+												src="/IM-WEB/resource/img/tx/tx2.jpg" /></li>
+											<li style="float: left; width: 50%; height: 50%;"><img
+												src="/IM-WEB/resource/img/tx/tx3.jpg" /></li>
+											<li style="float: left; width: 50%; height: 50%;"><img
+												src="/IM-WEB/resource/img/tx/tx4.jpg" /></li>
+										</ol>
+										<p class="userNickName">中信银行</p>
+									</li>
+									<li><img src="/IM-WEB/resource/img/tx/tx3.jpg" />
+										<p class="userNickName">廊坊银行</p></li>
+									<li><img src="/IM-WEB/resource/img/tx/tx4.jpg" />
+										<p class="userNickName">邯郸银行</p></li>
+									<li><img src="/IM-WEB/resource/img/tx/tx5.jpg" />
+										<p class="userNickName">招商银行</p></li>
+								</ul>
+							</div> -->
+							<!-- 平台 -->
+							<div class="chat_search_window chat_platform_search_box">
+								<div class="search_top_tip">
+									<span class="title">平台</span> <a class="showAll">收起</a>
+								</div>
+								<ul id="platFormBox" class="left_users_list">
+									<!-- <li><img src="/IM-WEB/resource/img/tx/tx1.jpg" />
+										<p class="userNickName">中原银行</p></li>
+								 -->
+								</ul>
+							</div>
+						</div>
+						<!-- 搜索栏弹出层结束 -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 左侧列表结束 -->
+
+		<!-- 右侧聊天窗口内容开始 -->
+		<div class="center_chat center_chat1">
+			<div class="center_chat_div">
+
+				<!-- 好友列表显示的时候的展示窗口开始 -->
+				<div id="centerChatBox" style="display: none;">
+					<div class="client_bank_name">
+						<span id="toChatWindowName">未知的窗口</span> <a id="chatWindowFriendDeatailTagA" class="list_point"><img
+							src="/IM-WEB/resource/img/list_point.png" class="list_point_img" /></a>
+							<button id="chatWindowAddFriendButton" style="display:none" class="rapid_quotation_btn fr" style="margin-top:25px">加好友</button>
+					</div>
+					<!-- 展示聊天内容的面板 -->
+					<div class="custom-cont-list">
+						<div id="chatArea" class="custom-con"
+							onmouseover="scrollEnter(this);" onmouseout="scrollOut(this);">
+						 
+						</div>
+					</div>
+					<div class="custom-cont-text">
+						<div class="expression_button_box">
+							<a class="icon_face"><img
+								src="/IM-WEB/resource/img/emojiPackage/face.png" width="100%"></a>
+							<a class="icon_file"><img
+								src="/IM-WEB/resource/img/file_package.png" width="100%"><input
+									type="file" /></a>
+							<button id="rapidQuotation" class="rapid_quotation_btn fr">快速报价</button>
+						</div>
+						<a id="sendButton" class="send_btn fr">发送</a>
+						<div class="dialog_text_con">
+							<textarea id="sendMessageContext" style="resize: none;" name="sendMessageContext" placeholder="enter键快捷发送    .  shift+enter换行"></textarea>
+						</div>
+					</div>
+					<!-- 右上角省略号点击出来的弹窗 -->
+					<div class="add_members_box" id="addMemberBoxGroup">
+						<!-- 群聊的时候才有开始 -->
+						<div class="group_add_members_top">
+							<div class="group_name_box">
+								<span>群名</span>
+								<p>
+									<input type="text" placeholder="点击输入群名" id="addMemberBoxGroupName" ><i class="icon_edit"></i>
+								</p>
+							</div>
+							<div class="group_notice_box">
+								<span>群公告</span>
+								<!-- <p><input type="text" placeholder="暂无群公告" value="" disabled></p>非群主没有群公告的显示，如果有群公告，就让value有内容即可 -->
+								<p>
+									<input type="text" placeholder="点击编辑群公告"  id="addMemberBoxGroupNotice" value=""><i
+										class="icon_edit"></i>
+								</p>
+								<!-- 群主没有公告的显示，如果有群公告，就让value有内容（比非群主的多一个编辑图标） -->
+							</div>
+						</div>
+						<!-- 群聊的时候才有结束 -->
+						<ul id="addMembersGroup" class="left_users_list add_members_list">
+							 
+						</ul>
+						<!-- 群聊的时候才有开始 -->
+						<div class="delete_and_exit_box">
+							<button class="delete_and_exit">删除并退出</button>
+						</div>
+						<!-- 群聊的时候才有结束 -->
+						<!-- 右上角省略号点击出来的弹窗 -->
+						</div>	
+						
+						
+				<!-- 右上角省略号点击出来的弹窗 -->
+				<div id="add_members_box_person" class="add_members_box"  style="right: -188px;">
+					<!-- 个人的时候才有 -->
+					<ul id="addMembersFriend" class="left_users_list add_members_list">
+						<li class="add_members_li" id="addMembersBtnPerson"><img
+							src="/IM-WEB/resource/img/add_pic.jpg"   photoFlag='false'/>
+							<p class="members_name">添加成员</p></li>
+					</ul>
+					<!-- 右上角省略号点击出来的弹窗 -->
+				</div>				
+				</div>
+				
+				<!-- 好友列表显示的时候的展示窗口结束 -->
+
+				<!-- 通讯录列表显示的时候的展示窗口开始 -->
+				<div id="centerAddressBookBox" style="display: none;">
+					<div class="client_bank_name">
+						<span  id="contactWindowTitle">新的朋友</span>
+					</div>
+
+					<!-- 通讯录群聊详情内容 -->
+					<div class="txl_detail_con">
+
+						<!-- 通讯录新的朋友详情内容 -->
+						<ul class="txl_newFriend_detail_con clearfix"
+							style="display: none;" id="contactList">
+							<!-- 未接受的显示如下： -->
+				<!-- 			<li><a href="javascript:;" class="clearfix"> <img
+									src="/IM-WEB/resource/img/tx/tx1.jpg" />
+									<div class="rgh_newFriend_requestInfo">
+										<span>某某</span>
+										<p>我是群聊“中原银行项目组”的某某我是群聊“中原银行项目组”的某某</p>
+									</div>
+									<button class="newFriend_accept">接受</button>
+							</a></li>
+							已填加的显示如下：
+							<li><a href="javascript:;" class="clearfix"> <img
+									src="/IM-WEB/resource/img/tx/tx1.jpg" />
+									<div class="rgh_newFriend_requestInfo">
+										<span>某某</span>
+										<p>我是群聊“中原银行项目组”的某某</p>
+									</div> <span class="has_accept">已填加</span>
+							</a></li> -->
+						</ul>
+
+							<!-- 通讯录群聊详情内容 -->
+						<ul class="txl_groupChat_detail clearfix" style="display:none;" onmouseover="scrollEnter(this);" onmouseout="scrollOut(this);" id="groupContactDetail">
+							
+						</ul>
+
+						<!-- 平台或者好友详情内容 -->
+						<div class="platform_or_buddy_detail_con cen"
+							style="display: none;">
+							<div class="platform_or_buddy_cen">
+								<div class="platform_or_buddy_cen_top clearfix">
+									<img src="/IM-WEB/resource/img/tx/tx1.jpg"
+										class="platform_or_buddy_img fr" />
+									<div class="platform_or_buddy_left fl">
+										<div class="platform_or_buddy_left_top clearfix">
+											<h3 class="users_nickname fl">中原银行AA</h3>
+											<i class="icon_sex_girl fl"></i>
+										</div>
+										<p class="personalized_signature">个性签名</p>
+									</div>
+								</div>
+								<ul class="platform_or_buddy_cen_btm">
+									<li class="clearfix"><label>备&nbsp;&nbsp;&nbsp;注</label>
+										<div class="ipt_wrapper">
+											<input type="text" value="中原银行AA"
+												onfocus="showBtmLine(this);" onblur="hideBtmLine(this);" />
+										</div></li>
+									<li class="clearfix"><label>单&nbsp;&nbsp;&nbsp;位</label>
+										<div class="ipt_wrapper">
+											<input type="text" value="北京朝阳" readonly />
+										</div></li>
+									<li class="clearfix"><label>企业用户号</label>
+										<div class="ipt_wrapper">
+											<input type="text" value="weixin1072146066" readonly />
+										</div></li>
+									<li class="clearfix"><label>来&nbsp;&nbsp;&nbsp;源</label>
+										<div class="ipt_wrapper">
+											<input type="text" value="通过通讯录添加" readonly />
+										</div></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="btn_wrappper_cen cen" style="display: none;">
+						<button class="tab_sure_btn" id="toChatButton">发送消息</button>
+					</div>
+				</div>
+				<!-- 通讯录列表显示的时候的展示窗口结束 -->
+
+			</div>
+		</div>
+		<!-- 右侧聊天窗口内容结束 -->
+	</div>
+	<script>
+	var oneSelf;
+	$(function(){
+		//查询登录者自己的详细信息
+		DwrUserQueryServiceImpl.queryOneSelfInfo(function(resultData){
+			oneSelf=$.parseJSON(resultData);
+			if(null==oneSelf){
+				return false;
+			}
+			$("#addFriendInputMsg").val("您好! 我是["+oneSelf.nameCn+"-"+oneSelf.userName+"]");
+			$(".icons_currentUser").find("img").attr("toChatId",oneSelf.id);
+			$(".icons_currentUser").find("img").attr("src",oneSelf.userPhoto);
+		});
+	})
+	
+	
+	
+	//滚动条事件
+	function scrollEnter(oId){
+		oId.style.overflowY="auto";
+	}
+	function scrollOut(oId){
+		oId.style.overflowY="hidden";
+	}
+	//让通讯录--平台或好友详情的备注出现或者消失input底部边框线的事件
+	function showBtmLine(oId){
+		oId.style.borderBottom="1px solid #555";
+	}
+	function hideBtmLine(oId){
+		oId.style.borderBottom="1px solid transparent";
+	}
+	//获取高度事件
+	function getHeight(){
+		//左侧高度
+		$(".left_list_btn").height($(window).height()-1);
+		//聊天版面左侧高度
+		$("#chatArea").css({"height":($(window).height()-$(".custom-cont-text").height()-$(".client_bank_name").height()-2),"overflow-y":"auto"});
+		//聊天版面右侧高度
+		$(".center_chat_div").css({"height":$(window).height(),"overflow-y":"auto"});
+		//列表高度控制
+		$(".chatLeftListBox").css({"height":$(window).height()-$("#leftListSearch").height()-1,"overflow-y":"hidden"});
+		$("#addressBook").height($(".chatLeftListBox").height());
+		$("#chatLeftDiv").height($(".chatLeftListBox").height());
+		//左滑动出来的弹窗
+		$(".add_members_box").css({"height":$(window).height()-$(".client_bank_name").height()-1,"overflow":"hidden"});
+		//通讯录详情的高度
+		$(".txl_groupChat_detail").css({"height":$(window).height()-$("#centerAddressBookBox .client_bank_name").height()-121,"overflow-y":"auto"});
+	}
+	$(window).resize(function() {
+		getHeight();
+	});
+	$(function(){
+		getHeight();
+		//左侧按钮的点击事件
+		$(".left_list_btn").find("span").on("click",function(event){
+			$(this).addClass("active").siblings().removeClass("active");
+			if($(this).hasClass("icons_addPic")){
+				//加好友 创建群 选项卡按钮
+				$(".add_clients_box").show();
+			}else{
+				$(".add_clients_box").hide();
+				//跳转到会话界面的按钮
+				if($(this).hasClass("icons_chatPic")){
+					$("#chatLeftDiv").show();
+					$("#addressBook").hide();
+
+					
+					
+					//$("#centerChatBox").show();
+					//$("#centerAddressBookBox").hide();
+					//跳转到通讯录界面的按钮
+				}else if($(this).hasClass("icons_userPhoto")){
+					$("#chatLeftDiv").hide();
+					$("#addressBook").show();
+
+					
+					//$("#centerChatBox").hide();
+					//$("#centerAddressBookBox").show();
+				}
+			}
+			//判断是否搜索框显示着，如果显示着，将其隐藏
+			if($(".chat_search_alert_box").is(":visible")){
+				$(".chat_left_layer_mask").hide();
+				$(".chat_search_alert_box").hide();
+				$("#leftListSearch").find(".icons_search").show();
+				$("#leftListSearch").find(".icons_cancel").hide();
+				$("#leftListSearch").find("input").val("");
+			}
+		});
+		
+		//加好友或者创建群的点击事件
+		$(".add_clients_box").find("p").on("click",function(ev){
+			ev.stopPropagation();//阻止冒泡
+			$(ev.target).parent(".add_clients_box").hide();
+			$(ev.target).parents(".icons_addPic").removeClass("active");
+			$(".chat_layer_mask").show();
+			if($(this).index()==1){
+				$("#queryAllUserPanel").empty();
+				$(".add_friends_box").show();
+			}else{
+				$(".create_group_box").show();
+				addFriendListForCreateGroup("1");
+			}
+		});
+		
+		//加好友弹窗的关闭按钮
+		hideCreateGroup(".add_friends_box",".close_btn");
+		//加好友验证弹窗的关闭按钮/取消按钮/确定按钮
+		hideCreateGroup(".add_friends_request_box",".close_btn");
+		hideCreateGroup(".add_friends_request_box",".tab_sure_btn");
+		//创建群弹窗的关闭按钮/取消按钮/确定按钮点击事件
+		hideCreateGroup(".create_group_box",".close_btn");
+		hideCreateGroup(".create_group_box",".create_group_cancel_btn");
+		hideCreateGroup(".create_group_box",".create_group_sure_btn");
+		//快速报价弹窗的关闭按钮/取消按钮/确定按钮点击事件
+		hideCreateGroup(".rapid_quotation_box",".close_btn");
+		hideCreateGroup(".rapid_quotation_box",".tab_sure_btn");
+		hideCreateGroup(".rapid_quotation_box",".cancel_btn");
+		
+		function hideCreateGroup(oParentClass,oClass){
+			$(oParentClass).find(oClass).on("click",function(){
+				$(".chat_layer_mask").hide();
+				if(oParentClass == ".create_group_box"){
+					$(".create_group_box").hide();
+					$(".create_group_left_list_box").find("label").attr("data-value","");
+					$(".create_group_left_list_box").find("label").removeClass("checked");
+					$("#createGroupTip").html("请勾选需要添加的联系人");
+				
+					if($(".add_members_box").css("right")=='0px'){//如果是点击添加成员出来的弹窗，也要把添加成员左滑出来的框隐藏
+						$(".add_members_box").animate({"right":"-188px"},300);
+					}
+					if(oClass==".create_group_sure_btn"){
+						var arrays = [];
+						$("#createGroupSelectedList > li").each(function(){
+							var chatId = $(this).attr("chatId");
+							arrays.push(chatId);
+						});
+						//取出传递的标记，如果是在会话列表右上角点击打开的面板  则可能是添加群成员或者删除群成员操作
+						var flag = $(".create_group_sure_btn").attr("oprFlag");
+						var groupId =$(".create_group_sure_btn").attr("groupId");
+						if(flag=="add"){
+							//添加群成员
+							DwrUserGroupServiceImpl.addUserToGroup(groupId,arrays);
+						}else if(flag=="rem"){
+							//删除群成员
+							DwrUserGroupServiceImpl.removeGroupUser(groupId,arrays);
+						}else{
+							//否则为创建群操作
+							//将选择的群成员 存入数组,创建群
+							DwrUserGroupServiceImpl.createGroup(arrays,function(data){
+								queryGroupList();
+							});
+						}
+						$(".create_group_sure_btn").removeAttr("oprFlag");
+						$(".create_group_sure_btn").removeAttr("groupId");
+					}
+					
+					$("#createGroupSelectedList").empty();
+				}else if(oParentClass == ".add_friends_box"){
+					$(".add_friends_box").hide();
+				}else if(oParentClass == ".add_friends_request_box"){
+					$(".add_friends_request_box").hide();
+					$("#backGroundDIV").hide();
+				}else if(oParentClass == ".rapid_quotation_box"){
+					if(oClass==".tab_sure_btn"){
+						var regExp = RegExp("^\\d+$");
+						
+						var decimalRegExp = RegExp("^(\\d+\.?\\d+|\\d+)$");
+
+						//利率%
+						var rateInput = $("#rateInput").val();
+						//金额 万
+						var moneyInput = $("#moneyInput").val();
+						//期限
+						var deadlineInput = $("#deadlineInput").val();
+						//起息日
+						var StartInterestDate = $("#StartInterestDate").val();
+						
+						
+						//利率和金额是小数 或者 整数
+						if(!decimalRegExp.test(rateInput)){
+							$("#rateInput").css("color","red");
+							$("#rateInput").css("border","1px solid red");
+							$("#rateInput").focus();
+							return false;
+						}else{
+							$("#rateInput").css("color","green");
+							$("#rateInput").css("border","");
+						}
+						if(!decimalRegExp.test(moneyInput)){
+							$("#moneyInput").css("color","red");
+							$("#moneyInput").css("border","1px solid red");
+							$("#moneyInput").focus();
+							return false;
+						}else{
+							$("#moneyInput").css("border","");
+							$("#moneyInput").css("color","green");
+						}
+						//期限是整数
+						if(!regExp.test(deadlineInput)){
+							$("#deadlineInput").focus();
+							$("#deadlineInput").css("color","red");
+							$("#deadlineInput").css("border","1px solid red");
+							return false;
+						}else{
+							$("#deadlineInput").css("border","");
+							$("#deadlineInput").css("color","green");
+						}
+						if(StartInterestDate==""){
+							$("#StartInterestDate").css("border","1px solid red");
+							return false;
+						}else{
+							$("#StartInterestDate").css("border","");
+						}
+						
+						
+						var kind = $("#tongcun").attr("class");
+						var kindStr="种类:";
+						if(kind=="active"){
+							kindStr=kindStr+"同存";
+						}else{
+							kindStr=kindStr+"理财";
+						}
+						//就是这里
+						var sendValue=kindStr+" - 利率 :"+rateInput+"% ,金额:"+moneyInput+"万 , 期限:"+deadlineInput+"天, 起息日:"+StartInterestDate;
+						currentHtml = "<div class='currentUserBox'><div class='currentUserDiv clearfix'><img class='user_tx' isUserImg='true' src='"+oneSelf.userPhoto+"' toChatId='"+oneSelf.id+"' width='40'/><div class='currentUserCon'><i></i><p>"+sendValue+"</p></div></div></div>";
+						$("#chatArea").append(currentHtml); 
+						var toChatId = $("#sendButton").attr("toChatId");
+						
+						
+						var sList_thisChat = $("#sessionListUl > li[chatId="+toChatId+"]");
+						//点击发送消息按钮时  将会话列表中的数字置位0
+						var unrdNumText =sList_thisChat.find(".unreadMes").text();
+						if(unrdNumText!=""){
+							var unrdNum = parseInt(unrdNumText);
+							sList_thisChat.find(".unreadMes").remove();
+							var unrdSumText = $("#unReadSessionCount").text();
+							var unrdSum = parseInt(unrdSumText);
+							//未读消息总数
+							var newSum = unrdSum-unrdNum;
+							//如果未读消息总数为0 则不显示
+							if(newSum<=0){
+								$("#unReadSessionCount").removeClass("unreadMes");
+								$("#unReadSessionCount").text("");
+							}else{
+								$("#unReadSessionCount").text(newSum);
+							}
+						}
+						
+						
+						
+						//群组与个人的会话区分标识
+					 	var sessionFlag = $("#sendButton").attr("sessionFlag");
+					 	
+					 	$("#chatArea").scrollTop($("#chatArea")[0].scrollHeight);
+					 	var selectLi = $("#sessionListUl > li[chatId='"+toChatId+"']");
+					 	var oldContent = selectLi.attr("chatContent");
+					 	var newChatConetnt=currentHtml;
+					 	//点击发送按钮时，查看是否存在已经缓存的消息记录 如果已经存在聊天记录 则拼接
+					 	if(oldContent!=undefined && oldContent!=""){
+					 		newChatConetnt = oldContent+newChatConetnt;
+					 	}
+					 	selectLi.attr("chatContent",newChatConetnt);
+					 	//将会话列表中的会话放到第一行去
+					 	selectLi.parent().prepend(selectLi);
+					 	if(sessionFlag=="SG"){
+							selectLi.find("p").html('<span style="float:left">'+oneSelf.userName+":"+'</span>'+sendValue);
+							//为群组聊天,将消息内容发送到群组接收者
+							DwrUserGroupServiceImpl.sendChatMessage(toChatId,sendValue,function(resultData){
+							});
+						}else if(sessionFlag=="SU"){
+							selectLi.find("p").html(sendValue);
+							DwrUserFriendServiceImpl.sendUserMsg(toChatId,sendValue,function(resultData){
+							});
+						}
+						$("#sendMessageContext").focus();
+						
+					}
+					
+					$(".rapid_quotation_box").hide();
+				}
+			});
+		}
+		//左侧查询
+		searchIncident("#leftListSearch");
+		//加好友弹窗的查询
+		searchIncident("#addFriendsSearch");
+		//创建群弹窗的查询
+		searchIncident("#createGroupSearch");
+		function searchIncident(oId){
+			//左侧搜索按钮点击事件
+			$(oId).find("button").on("click",function(){
+				var queryValue = $(oId).find("input").val();
+				if(queryValue!=""){
+					 $("#contact").empty();
+					 $("#platFormBox").empty();
+					if(oId=="#leftListSearch"){
+						$(".chat_left_layer_mask").show();
+						$(".chat_search_alert_box").show();
+						//搜索用户时 搜索联系人列表
+						DwrUserQueryServiceImpl.queryUserInContactList(queryValue,function(resultData){
+						   		 $("#contact").empty();
+								resultData=$.parseJSON(resultData);
+								if(resultData==null || resultData.length<1){
+									$("#contact").html("<font color='red' align='center'>无搜索结果。。。</font>");
+									return false;
+								}
+								for(var index in resultData){
+									var object = resultData[index];
+									var li = $("<li chatId='"+object.id+"' isFriend='true'  chatImg="+object.userPhoto+" chatName="+object.userName+" ><img src='"+object.userPhoto+"' /><p class='userNickName'>"+object.custUserName+"</p></li>")
+									$("#contact").append(li);
+								}
+								queryPlatformListClick();
+						});
+						
+						//点击会话列表上的搜索框展示出来的查询内容
+			DwrUserQueryServiceImpl.queryUserInPlatform(queryValue,function(resultData){
+				    $("#platFormBox").empty();
+					resultData = $.parseJSON(resultData);
+					if(resultData==null || resultData.length<1){
+						$("#platFormBox").html("<font color='red' align='center'>无搜索结果。。。</font>");
+						return false;
+					 }
+						for ( var index in resultData) {
+							 var object = resultData[index];
+							 var li = $("<li chatId='"+object.id+"' isFriend='false' chatImg="+object.userPhoto+" chatName="+object.userName+"><img src='"+object.userPhoto+"' /><p class='userNickName'>"+object.custUserName+"</p></li>")
+							$("#platFormBox").append(li);
+						}
+						
+						queryPlatformListClick();
+						});	
+						
+						
+					}else if(oId=="#createGroupSearch"){
+						/*重新刷新群搜索内容对应的左侧的好友列表*/
+					}
+				}else{
+					if(oId=="#leftListSearch"){
+						$(".chat_left_layer_mask").hide();
+						$(".chat_search_alert_box").hide();
+					}else if(oId=="#createGroupSearch"){
+						/*重新刷新群内所有的左侧的好友列表*/
+					}
+				}
+			});
+			//左侧搜索框键盘事件
+			$(oId).find("input").on("keyup",function(){
+				if($(this).val()!=""){
+					$(oId).find(".icons_search").hide();
+					$(oId).find(".icons_cancel").show();
+				}else{
+					$(oId).find(".icons_search").show();
+					$(oId).find(".icons_cancel").hide();
+				}
+			});
+			//左侧搜索框中有文字时，点击叉叉，清空内容，搜索按钮显示，叉叉隐藏
+			$(oId).find(".icons_cancel").on("click",function(){
+				$(oId).find("input").val("");
+				$(oId).find(".icons_search").show();
+				$(oId).find(".icons_cancel").hide();
+				if(oId=="#leftListSearch"){
+					$(".chat_left_layer_mask").hide();
+					$(".chat_search_alert_box").hide();
+				}
+			});
+		}
+		//弹窗里面显示全部的点击事件
+		$(".chat_search_alert_box").find(".showAll").on("click",function(){
+			if($(this).html()=="收起"){
+				$(this).parents(".chat_search_window").siblings().hide();
+				$(this).parent().siblings(".left_users_list").css("height","auto");
+				$(this).html("显示全部");
+			}else{
+				$(this).parents(".chat_search_window").siblings().show();
+				$(this).parent().siblings(".left_users_list").css("height","290px");
+				$(this).html("显示全部");
+			}
+		});
+
+
+		//创建群弹窗右侧选中好友之后右边的删除按钮点击事件
+		$("#createGroupSelectedList").on("click",".create_group_selected_cancel",function(){
+			var $This = $(this);
+			$This.parent("li").remove();//父元素li删除
+			$.each(".create_group_left_list_box .userLi",function(i){//循环遍历创建群的左侧好友列表，看哪个li下的图片路径与要删除的图片路径一样，昵称也一样的，就同等去掉checked的勾选
+				if($This.siblings("img").attr("src") == $(".create_group_left_list_box .userLi").eq(i).find("img").attr("src")&& ($This.siblings(".userNickName").html()== $(".create_group_left_list_box .userLi").eq(i).find(".userNickName").html())){
+					$(".create_group_left_list_box .userLi").eq(i).find("label").attr("data-value","");
+					$(".create_group_left_list_box .userLi").eq(i).find("label").removeClass("checked");
+				}
+			});
+			if($("#createGroupSelectedList").children().length==0){
+				$("#createGroupTip").html("请勾选需要添加的联系人");
+				$(".create_group_sure_btn").addClass("disabled");//右侧确定按钮添加不可点击的展示效果
+				$(".create_group_sure_btn").attr("disabled",true);//右侧确定按钮添加不可点击状态
+			}else{
+				$("#createGroupTip").html("已选择了"+$("#createGroupSelectedList").children().length+"个联系人");
+			}
+			
+			if($("#createGroupSelectedList").children().length<2){
+				$(".create_group_sure_btn").addClass("disabled");//右侧确定按钮添加不可点击的展示效果
+				$(".create_group_sure_btn").attr("disabled",true);//右侧确定按钮添加不可点击状态
+			}else{
+				$(".create_group_sure_btn").removeClass("disabled");//右侧确定按钮移除不可点击的展示效果
+				$(".create_group_sure_btn").attr("disabled",false);//右侧确定按钮移除不可点击状态
+			}
+		});
+		
+	 
+
+		//右上角省略号点击出来的左划框的群名和群公告的input鼠标划入出现编辑图标，划出编辑图标消失事件
+		addMemberHover(".group_name_box");
+		addMemberHover(".group_notice_box");
+		function addMemberHover(oClass){
+			$(oClass).find("input").hover(function(){
+				$(this).siblings(".icon_edit").show();
+			},function(){
+				$(this).siblings(".icon_edit").hide();
+			});
+		}
+		
+		//添加成员点击弹出创建群的弹窗
+		$("#addMembersBtn").on("click",function(){
+			$(".chat_layer_mask").show();
+			$(".create_group_box").show();
+		});
+		
+		//快速报价点击出现弹窗
+		$("#rapidQuotation").on("click",function(){
+			
+			$("#rateInput").val('');
+			$("#moneyInput").val('');
+			$("#deadlineInput").val('');
+			$("#StartInterestDate").val('');
+			
+			
+			$("#rateInput").css("color","");
+			$("#moneyInput").css("color","");
+			$("#deadlineInput").css("color","");
+			$("#StartInterestDate").css("border","");
+			$(".chat_layer_mask").show();
+			$(".rapid_quotation_box").show();
+			$("#rateInput").focus();
+		});
+		
+	
+		//通讯录----平台或者好友点击出详情
+		function platform_buddy(oId){
+			$(oId).on("click",function(){
+				$(".txl_groupChat_detail").hide();//群聊详情内容隐藏
+				$(".txl_newFriend_detail_con").hide();//新的朋友详情内容隐藏
+				$(".platform_or_buddy_detail_con").show();//平台或者好友列表详情内容显示
+				$(".btn_wrappper_cen").show();//发消息按钮
+			});
+		}
+		platform_buddy("#txlPlatformBox");
+		platform_buddy("#txlCirclesBox");
+		
+		//点击头像出来的个人信息弹窗
+		function showSelfInfo(oTarget){
+			$(oTarget).on("click","img",function(e){
+				$(".self_img_info_box").hide();
+				if($(this).attr("photoFlag")=="false"){
+					return false;
+				}
+				if($(this).attr("isUserImg")!="true"){
+					return false;
+				}
+				var ev = e||event,
+					l=ev.clientX,
+					t=ev.clientY;
+				//if(!($(this).hasClass("active"))){
+					//浏览器窗口边缘检测
+					if(($(window).width()-l)>$(".self_img_info_box").width()){
+						l=$(this).offset().left+$(this).width()/2;
+					}else{
+						l=l-$(".self_img_info_box").width();
+					}
+					if(($(window).height()-t)>$(".self_img_info_box").height()){
+						t=$(this).offset().top+$(this).height()/2;
+					}else{
+						t=t-$(".self_img_info_box").height();
+					}
+					$(".self_img_info_box").css({"top":t,"left":l});
+					//展示成员名片信息
+					
+					console.info("this-image-id:"+$(this).attr("toChatId"));
+
+					if( $(this).attr("toChatId")==oneSelf.id){
+						//说明是自己的名片
+						$("#cardName").text(oneSelf.userName);
+						$("#cardNumber").text(oneSelf.id);
+						$("#cardPhoto").attr("src",oneSelf.userPhoto);
+						$("#cardRegion").val(oneSelf.region);
+						
+						
+						$("#cardRemarksOuter").hide();
+						$("#cardNickNameOuter").hide();
+						$("#cardSourceOuter").hide();
+						$(".self_img_info_box").show();
+					}else{
+						
+						//如果是别人的名片
+						var tochatId = $(this).attr("tochatId");
+						var sessionFlag = $(this).attr("sessionFlag");
+						var groupId = $(this).attr("groupId");
+						DwrUserQueryServiceImpl.queryUserDetail(tochatId,sessionFlag,
+								groupId,function(resultJSON){
+							console.info(resultJSON)
+							var data = $.parseJSON(resultJSON);
+							//如果是在群组里则显示群昵称
+							if(sessionFlag!=null&&sessionFlag!=""){
+								var groupNickName = data.groupNickName;
+								
+								$("#cardNickName").val(groupNickName);
+								$("#cardNickNameOuter").show();
+							}else{
+								$("#cardNickNameOuter").hide();
+							}
+							var friendName = data.friendName;
+							var friendId = data.friendId;
+							var friendPhoto = data.friendPhoto;
+							var region = data.region;
+							$("#cardName").text(friendName);
+							$("#cardNumber").text(friendId);
+							$("#cardPhoto").attr("src",friendPhoto);
+							$("#cardRegion").val(region);
+							
+							//如果是好友则显示备注和来源
+							if(data.isFriend=="Y"){
+								var remarks = data.remarks;
+								var source = data.source;
+								$("#cardRemarks").val(remarks);
+								$("#cardRemarksOuter").show();
+								$("#cardSource").val(source);
+								$("#cardSourceOuter").show();
+								
+							}else{
+								$("#cardRemarksOuter").hide();
+								$("#cardSourceOuter").hide();
+							}
+							$(".self_img_info_box").show();
+						});
+						
+					}
+					
+					
+					//$(this).addClass("active");
+				//}else{
+					//$(".self_img_info_box").hide();
+					//$(this).removeClass("active");
+				//}
+			});
+		}
+		
+		$("#cardRemarks").blur(function(){
+			var remarks = $(this).val();
+			var friendId = $("#cardNumber").text();
+			DwrUserFriendServiceImpl.modifyFriendRemarks(friendId,remarks);
+		});
+		
+		showSelfInfo(".icons_currentUser");
+		showSelfInfo(".otherUserDiv");
+		showSelfInfo(".currentUserDiv");
+		showSelfInfo(".add_members_list");
+		showSelfInfo(".txl_groupChat_detail");
+		showSelfInfo("#chatArea");
+		
+		//点击body的其他地方隐藏点击出来的区域
+		$(document).off('click');
+		$(document).on('click',function(e){
+			var target = e.target;
+			//隐藏右上角省略号点击出来的弹窗
+			if(!$(target).hasClass("list_point") && !$(target).parents().hasClass("list_point") && !$(target).hasClass('add_members_box') && !$(target).parents().hasClass("add_members_box")) {
+				if(!$(target).hasClass("chat_layer_mask") && !$(target).hasClass("create_group_box") && !$(target).parents().hasClass("create_group_box"))
+				$(".add_members_box").animate({"right":"-188px"},300);
+			}
+			if(!$(target).hasClass("icons_addPic") && !$(target).parents().hasClass("icons_addPic")){
+				$(".add_clients_box").hide();
+				$(".icons_addPic").removeClass("active");
+			}
+			if(!$(target).hasClass("user_tx") && !$(target).parents().hasClass("self_img_info_box")){
+				$(".self_img_info_box").hide();
+			}
+		});
+		
+	});
+	
+	
+	/**
+	*添加好友 - 搜索按钮
+	*/
+$("#friendQueryByAllButton").click(function(){
+	var names = $("#friendQueryByAllInput").val();
+	if(""==names){
+		return;
+	}
+	DwrUserQueryServiceImpl.queryUserInPlatform(names,function(datas){
+		$("#queryAllUserPanel").empty();
+		var array = $.parseJSON(datas);
+		if(array==null || array.length<1){
+			$("#queryAllUserPanel").html("<font color='red' align='center'>无搜索结果。。。</font>");
+			return;
+		}
+		for ( var index in array) {
+			var user = array[index];
+			var lis = $("<li></li>");
+			lis.attr("class","userLi clearfix");
+			var img = $("<img src='"+user.userPhoto+"' />");
+			var button = $("<button></button>");
+			button.attr("class","add_friends_btn");
+			button.text("加好友");
+			button.attr("chatId",user.id);
+			var p = $("<p></p>");
+			p.attr("class","userNickName");
+			p.html(user.custUserName);
+			lis.append(img);
+			lis.append(button);
+			lis.append(p);
+			
+			$("#queryAllUserPanel").append(lis);
+		}
+		//加好友弹窗的"加好友"按钮点击事件
+		$(".add_friends_btn").click(function(){
+			var  chatId = $(this).attr("chatId");
+			 $("#addFriendButtonReq").attr("chatId",chatId);
+			$(".add_friends_box").hide();
+			$(".add_friends_request_box").show();
+		});
+		
+	});
+})
+
+/* 		//加好友弹窗的"加好友"按钮点击事件  静态事件
+		$(".add_friends_box").find(".add_friends_btn").on("click",function(){
+			$(".add_friends_box").hide();
+			$(".add_friends_request_box").show();
+		}); */
+//点击申请添加好友按钮  发送申请内容
+$(".add_friends_request_box").find(".tab_sure_btn").click(function(){
+	if($(this).attr("class")=="tab_sure_btn sure_btn"){
+		$("#backGroundDIV").hide();
+		var reqMsg = $("#addFriendInputMsg").val();
+		var chatId = $("#addFriendButtonReq").attr("chatId");
+		DwrUserFriendServiceImpl.addUserReq(chatId,reqMsg,function(data){
+			
+			
+		});
+	}else if($(this).attr("class")=="tab_sure_btn cancel_btn"){
+		$("#backGroundDIV").hide();
+	}
+})
+//接收后台推送事件 好友申请
+function refreshNewUserReqMsgNumber(reqMsg){
+	reqMsg=$.parseJSON(reqMsg);
+	if(null==reqMsg){
+		return false;
+	}
+	$("#newUserReqMsgNumber").addClass("unreadMes");
+	$("#unReadReqCount").addClass("unreadMes");
+	var val =$("#newUserReqMsgNumber").text();
+	var oldVal = parseInt(val);
+	if(isNaN(oldVal) || oldVal==""){
+		oldVal=0;
+	}
+	var newReqCount = ++oldVal;
+	$("#newUserReqMsgNumber").text(newReqCount);
+	
+	var li=$("<li><a href='javascript:;' class='clearfix'><img src='"+reqMsg.userPhoto+"'/><div class='rgh_newFriend_requestInfo'><span>"+reqMsg.reqUserName+"</span><p>"+reqMsg.reqMsg+"</p></div><button class='newFriend_accept' id='disposeMessageRespButton'       userPhoto='"+reqMsg.userPhoto+"' userName='"+reqMsg.reqUserName+"' chatId='"+reqMsg.reqUserId+"'>接受</button></a></li>");
+
+	$("#contactList").prepend(li);
+	//通讯录展示的未读消息
+
+	$("#unReadReqCount").text(newReqCount);
+	disposeReqMessage();
+	}
+		
+
+//接收后台推送 同意好友申请
+function addUserToFriendList(userId){
+	var li = $("#sessionListUl > li[chatId='"+userId+"']");
+	//如果当前聊天框为申请的 响应好友,直接把<加好友>按钮替换成详情超链接
+	var chatId = $("#sendButton").attr("toChatId");
+	li.attr("isFriend","true");
+	if(chatId==userId){
+		$("#chatWindowAddFriendButton").hide()
+		$("#chatWindowFriendDeatailTagA").show()
+	}
+	queryUserFriendsList();
+	//li.insertBefore("#userFriendListTagB");
+}
+/**
+ * 处理好友申请
+ */
+function disposeReqMessage(){
+	//点击接受按钮 则按钮变为已同意
+	$("#contactList").find("button").unbind("click").bind("click",function(){
+		removeUnReadMsg();
+		$(this).text('已同意');
+		$(this).attr("disabled","disabled")
+		$(this).addClass("has_accept")
+		
+		var chatId = $(this).attr('chatId');
+		var userName = $(this).attr('userName');
+		var userPhoto = $(this).attr('userPhoto');
+		
+		DwrUserFriendServiceImpl.addUserResp($(this).attr('chatId'),'Y',function(data){
+			queryUserFriendsList();
+			
+		var obj = new Object();
+		obj.userId=chatId;
+		obj.sessionFlag='SU';
+		obj.isFriend='true';
+		obj.defaultName=userName;
+		obj.userPhoto=userPhoto;
+		obj.userName=userName;
+		obj.content='我同意了你的好友申请';
+		obj.append="false";
+		pushMessageInSessionList(obj);
+		});
+	});
+}
+
+
+$(function(){
+
+	/********************************会话列表查询开始*****************************************************/
+	//页面加载时 查询用户会话列表
+	DwrUserQueryServiceImpl.queryUserSessionList(function(resultData){
+		resultData=$.parseJSON(resultData);
+		if(null==resultData){
+			return false;
+		}
+		//会话列表未读消息的总数
+		var sNum = resultData.unReadSessionCount;
+		//请求列表中未读消息的总数
+		var rNum = resultData.unReadReqCount;
+		if(sNum>0){
+			$("#unReadSessionCount").addClass("unreadMes");
+			$("#unReadSessionCount").text(sNum);
+		}else{
+			$("#unReadSessionCount").text("");
+			$("#unReadSessionCount").removeClass("unreadMes");
+		}
+		if(rNum>0){
+			$("#newUserReqMsgNumber").addClass("unreadMes");
+			$("#unReadReqCount").addClass("unreadMes");
+			$("#newUserReqMsgNumber").text(rNum);
+			$("#unReadReqCount").text(rNum);
+		}else{
+			$("#newUserReqMsgNumber").removeClass("unreadMes");
+			$("#unReadReqCount").removeClass("unreadMes");
+			$("#newUserReqMsgNumber").text('');
+			$("#unReadReqCount").text('');
+		}
+		var sessionArray = resultData.sessionLists;
+		//将会话列表展示出来
+		showMessageInSessionList(sessionArray);
+		//给会话列表添加事件
+		clickSessionList();
+	});
+	/************************************回话列表查询结束*************************************************/
+
+	
+	/*************************************查询好友申请列表开始*****************************************************/
+	DwrUserFriendServiceImpl.queryUserReqList(function(resultData){
+		resultData = $.parseJSON(resultData);
+		if(null==resultData){
+			return false;
+		}
+		for(var index in resultData){
+			var obj = resultData[index];
+			var li = $("<li reqUserId='"+obj.reqUserId+"'><a href='javascript:void(0)' class='clearfix'> <img src='"+obj.userPhoto+"' /> <div class='rgh_newFriend_requestInfo'> <span>"+obj.reqUserName+"</span> <p> "+obj.reqMsg+"</p> </div> <button class='newFriend_accept' id='disposeMessageRespButton' userPhoto='"+obj.userPhoto+"' userName='"+obj.reqUserName+"' chatId='"+obj.reqUserId+"'>接受</button> </a></li>");
+			$("#contactList").append(li);
+		}
+		//处理好友申请事件
+		disposeReqMessage();
+	});
+	/*************************************查询好友申请列表结束*****************************************************/
+	
+	 
+ 
+})
+
+//点击详细信息界面的 发送按钮,展示聊天窗口
+$("#toChatButton").click(function(){
+	
+	$("#chatArea").empty();
+	
+	var toChatId = $(this).attr("chatId");
+	
+	var oldContent = $("#sessionListUl > li[chatId="+toChatId+"]");
+	if(oldContent.get(0)){
+		oldContent.click();
+	}else{
+	//如果会话列表中不存在这个会话  则将点击的联系人或者群组  放到会话列表栏中
+	var contactLi = $("#addressBook > li[chatId="+toChatId+"]");
+		
+	}
+	
+	
+	var toChatName = $(this).attr("toChatName");
+	//群组和单聊会话标志
+	var toChatFlag = $(this).attr("sessionFlag");
+	var isFriend = $(this).attr("isFriend");
+	//显示左边的会话列表
+	$("#chatLeftDiv").show();
+	//取出跳转到聊天窗口的  id 与 名称 传递到发送按钮中
+	$("#toChatWindowName").text(toChatName);
+	$("#sendButton").attr("toChatId",toChatId);
+ 	$("#sendButton").attr("sessionFlag",toChatFlag);
+ 	$("#sendButton").attr("isFriend",isFriend);
+	//显示右边的聊天窗口
+	$("#centerChatBox").show();
+	//把通讯录列表银承
+	$("#addressBook").hide();
+	//新的朋友界面隐藏
+	$("#centerAddressBookBox").hide();
+});
+
+ 
+
+
+
+
+
+
+ 
+		//通讯录----新的朋友点击出详情
+		$("#txlNewFriendsBox").on("click",function(){
+			$(".txl_groupChat_detail").hide();//群聊详情内容隐藏
+			$(".txl_newFriend_detail_con").show();//新的朋友详情内容显示
+			$(".platform_or_buddy_detail_con").hide();//平台或者好友列表详情内容隐藏
+			$(".btn_wrappper_cen").hide();//发消息按钮
+			$("#contactWindowTitle").text("新的好友申请");
+		});
+		
+		
+		//发送按钮点击事件
+		var currentHtml = '';
+		$("#sendButton").on("click",function(){
+			$("#sendMessageContext").focus();
+			var sendMessage = $("#sendMessageContext").val();
+			if(replace_space(sendMessage)==''){
+				$("#sendMessageContext").val('');
+				return;
+			}
+			var sendMessage=replace_em(sendMessage);
+			console.log(sendMessage);
+			if(sendMessage!=""){
+				currentHtml = "<div class='currentUserBox'><div class='currentUserDiv clearfix'><img isUserImg='true' class='user_tx' src='"+oneSelf.userPhoto+"' toChatId='"+oneSelf.id+"' width='40'/><div class='currentUserCon'><i></i><p>"+sendMessage+"</p></div></div></div>";
+				$("#chatArea").append(currentHtml);
+				$("#sendMessageContext").val("");
+				var toChatId = $("#sendButton").attr("toChatId");
+				
+				
+				var sList_thisChat = $("#sessionListUl > li[chatId="+toChatId+"]");
+				//点击发送消息按钮时  将会话列表中的数字置位0
+				var unrdNumText =sList_thisChat.find(".unreadMes").text();
+				if(unrdNumText!=""){
+					var unrdNum = parseInt(unrdNumText);
+					sList_thisChat.find(".unreadMes").remove();
+					var unrdSumText = $("#unReadSessionCount").text();
+					var unrdSum = parseInt(unrdSumText);
+					//未读消息总数
+					var newSum = unrdSum-unrdNum;
+					//如果未读消息总数为0 则不显示
+					if(newSum<=0){
+						$("#unReadSessionCount").removeClass("unreadMes");
+						$("#unReadSessionCount").text("");
+					}else{
+						$("#unReadSessionCount").text(newSum);
+					}
+				}
+				
+				
+				
+				
+			 	var sessionFlag = $(this).attr("sessionFlag");
+			 	
+			 	$("#chatArea").scrollTop($("#chatArea")[0].scrollHeight);
+			 	var selectLi = $("#sessionListUl > li[chatId='"+toChatId+"']");
+			 	var oldContent = selectLi.attr("chatContent");
+			 	var newChatConetnt=currentHtml;
+			 	//点击发送按钮时，查看是否存在已经缓存的消息记录 如果已经存在聊天记录 则拼接
+			 	if(oldContent!=undefined && oldContent!=""){
+			 		newChatConetnt = oldContent+newChatConetnt;
+			 	}
+			 	selectLi.attr("chatContent",newChatConetnt);
+			 	
+			 	
+			 	selectLi.parent().prepend(selectLi);
+				if(sessionFlag=="SG"){
+					selectLi.find("p").html('<span style="float:left">'+oneSelf.userName+":"+'</span>'+sendMessage);
+					//为群组聊天,将消息内容发送到群组接收者
+					DwrUserGroupServiceImpl.sendChatMessage(toChatId,sendMessage,function(resultData){
+					});
+				}else if(sessionFlag=="SU"){
+					selectLi.find("p").html(sendMessage);
+					DwrUserFriendServiceImpl.sendUserMsg(toChatId,sendMessage,function(resultData){
+					});
+				}
+			}
+			$("#sendMessageContext").val('');
+		});
+		
+		
+		//点击搜索出来的列表 点击事件
+		function queryPlatformListClick(){
+			$(".chat_search_alert_box").find("li").click(function(){
+				var chatId = $(this).attr("chatId");
+				//会话列表中是否存在
+				var sessionList = $("#sessionListUl > li[chatId='"+chatId+"']");
+				
+				if(sessionList.get(0)!=undefined && sessionList.get(0)!=null){
+					clickSessionList();
+					sessionList.get(0).click();
+				}else{
+					//搜索出来的成员列表    点击时添加到会话列表
+					var chatImg = $(this).attr("chatImg");
+					var chatName = $(this).attr("chatName");
+					var isFriend = $(this).attr("isFriend");
+					
+					li = $("<li sessionFlag='SU' isFriend='"+isFriend+"' chatId='"+chatId+"' defaultName='"+chatName+"'>"
+							+"<img src='"+chatImg+"' /> <div class='name_and_con'>"
+							+"<span>"+chatName+"</span> <p></p> </div></li>");
+					 $("#sessionListUl").prepend(li);
+					 clickSessionList();
+					 li.click();
+				}
+				//将搜索面板 隐藏起来
+				$(".chat_search_alert_box").hide();
+				$(".chat_left_layer_mask").hide();
+			})
+		}
+		$("#licai").click(function(){
+			$("#tongcun").removeAttr("class");
+			$("#licai").attr("class","active");
+		});
+		$("#tongcun").click(function(){
+			$("#licai").removeAttr("class");
+			$("#tongcun").attr("class","active");
+		});
+		
+		
+		//退出群聊事件
+		$(".delete_and_exit").click(function(){
+			var toChatId = $("#sendButton").attr("toChatId");
+			var selectLi = $("#sessionListUl > li[chatId='"+toChatId+"']");
+			
+			$("#centerChatBox").hide();
+		 	//将会话列表中的群信息移除
+		 	selectLi.remove();
+			//获取群id
+			DwrUserGroupServiceImpl.exitGroup(toChatId,function(resultData){
+				console.info("退出群操作:"+resultData)
+		 	//刷新通讯录群组列表
+		 	queryGroupList();
+			});
+		});
+		//清除用户登录信息
+		window.onbeforeunload = function(event) { 
+		        $.post("/IM-WEB/unloadCurrentUser",{},function(){})
+		}
+		
+	</script>
+</body>
+</html>

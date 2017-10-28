@@ -1,0 +1,117 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.yucheng.im.web</groupId>
+	<artifactId>IM-WEB</artifactId>
+	<packaging>war</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>IM-WEB Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>  
+        <!-- 文件拷贝时的编码 -->  
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>  
+        <!-- 编译时的编码 -->  
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>  
+    </properties>  
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+
+
+
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.yucheng.im.service</groupId>
+			<artifactId>IM-SERVER</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>4.1.9.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.directwebremoting</groupId>
+			<artifactId>dwr</artifactId>
+			<version>3.0.0-RELEASE</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/net.sf.json-lib/json-lib -->
+	<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.9.0</version>
+		</dependency>
+
+
+
+
+
+
+	<dependency>
+			<groupId>com.zgh</groupId>
+			<artifactId>commons-pool2</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+	<dependency>
+			<groupId>com.zgh</groupId>
+			<artifactId>mq</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+	<dependency>
+			<groupId>com.zgh</groupId>
+			<artifactId>redis</artifactId>
+			<version>1.0</version>
+		</dependency>
+ 
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+            <plugin>  
+                <groupId>org.apache.maven.plugins</groupId>  
+                <artifactId>maven-resources-plugin</artifactId>  
+                <version>2.6</version>  
+                <configuration>  
+                    <encoding>UTF-8</encoding>
+                    <!-- 指定编码格式，否则在DOS下运行mvn命令时当发生文件资源copy时将使用系统默认使用GBK编码 -->  
+                </configuration>  
+            </plugin>  
+			
+		</plugins>
+ 
+		<!-- <resources> <resource> <directory>src/main/resources</directory> <includes> 
+			<include>**/*.properties</include> <include>**/*.xml</include> </includes> 
+			是否替换资源中的属性 <filtering>false</filtering> </resource> <resource> <directory>src/main/resources</directory> 
+			<includes> <include>**/*.properties</include> <include>**/*.xml</include> 
+			</includes> <filtering>true</filtering> </resource> </resources> -->
+		<!-- mvn install -Dmaven.test.skip=true -->
+		<finalName>IM-WEB</finalName>
+	</build>
+	
+</project>

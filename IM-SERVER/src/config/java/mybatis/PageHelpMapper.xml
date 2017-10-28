@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="page_help">
+	<select id="queryAllCount" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select count(*)
+		from ${tableName}
+		where 1=1
+		${conditions}
+	</select>
+	<select id="queryAllData" resultType="java.util.Map">
+		select *
+		from ${tableName}
+		where 1=1
+		${conditions}
+		limit ${pageSize} offset ((${nowPage}-1)*${pageSize})
+	</select>
+
+
+</mapper>
